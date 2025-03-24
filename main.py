@@ -7,7 +7,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 import base64
 import time
 
-# Setup selenium Webdriver
 def create_driver():
     options = webdriver.ChromeOptions()
     options.add_argument("--disable-gpu")
@@ -17,7 +16,6 @@ def create_driver():
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     return driver
 
-#Scroll down to load more images
 def scroll_down(driver, scroll_pause_time=2, scroll_limit=5):
     last_height = driver.execute_script("return document.body.scrollHeight")
     for i in range(scroll_limit):
@@ -28,7 +26,6 @@ def scroll_down(driver, scroll_pause_time=2, scroll_limit=5):
             break
         last_height = new_height
 
-#Scrape all images
 def scrape_all_images(driver):
     try:
         images = driver.find_elements(By.TAG_NAME, 'img')
@@ -45,7 +42,6 @@ def scrape_all_images(driver):
         print(f"Error scraping images: {e}")
         return []
 
-#Save the image function
 def save_image(image_url, folder_name, file_name, retry_count=3):
     try:
         file_path =os.path.join(folder_name, f"{file_name}.jpg")
@@ -69,7 +65,6 @@ def save_image(image_url, folder_name, file_name, retry_count=3):
     except Exception as e:
         print(f"Error saving image {file_name}: {e}")
 
-#Main scraping function
 def scrape_and_save_images(base_folder, search_term, num_images=10):
     driver = create_driver()
     folder_path = os.path.join(base_folder, f"{'_'.join(search_term.split())}")

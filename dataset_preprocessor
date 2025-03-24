@@ -2,46 +2,35 @@ import os
 from PIL import Image
 import csv
 
-# Folder containing all the subfolders with images
 root_folder = 'endangered_species'
 
-# Create a CSV file to save the filename and text (folder name) metadata
 csv_file = 'text_metadata.csv'
 
-# Prepare the CSV file to write data
 with open(csv_file, mode='w', newline='') as file:
     writer = csv.writer(file)
-    writer.writerow(['filename', 'text'])  # Writing header
+    writer.writerow(['filename', 'text']) 
 
-    # Iterate over all subfolders (categories like ash_reshteh, tahchin)
     for subfolder in os.listdir(root_folder):
         subfolder_path = os.path.join(root_folder, subfolder)
         
-        if os.path.isdir(subfolder_path):  # Only process folders
-            # Iterate over all image files inside the subfolder
+        if os.path.isdir(subfolder_path): 
             for image_name in os.listdir(subfolder_path):
-                if image_name.endswith(('.jpg', '.jpeg', '.png')):  # Consider common image extensions
+                if image_name.endswith(('.jpg', '.jpeg', '.png')):
                     image_path = os.path.join(subfolder_path, image_name)
                     
-                    # Open the image
                     img = Image.open(image_path)
 
-                    # Get the current image size
                     width, height = img.size
 
-                    # Create a new 256x256 image with padding
                     new_size = 256
-                    new_img = Image.new('RGB', (new_size, new_size), (255, 255, 255))  # White background
+                    new_img = Image.new('RGB', (new_size, new_size), (255, 255, 255)) 
                     
-                    # Compute the position to paste the original image (centered)
                     left = (new_size - width) // 2
                     top = (new_size - height) // 2
                     new_img.paste(img, (left, top))
 
-                    # Save the resized image back (you can change this path if needed)
-                    new_img.save(image_path)  # Overwrite or save in a different location if needed
+                    new_img.save(image_path) 
 
-                    # Write the filename and folder name to the CSV
                     writer.writerow([image_name, subfolder])
 
 print("Processing complete. Images resized and metadata saved in 'text_metadata.csv'.")
